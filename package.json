@@ -1,0 +1,55 @@
+{
+  "name": "sqlstring",
+  "version": "0.0.1",
+  "description": "SQL escape and format from mysql/lib/protocol/SqlString.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "make test-all"
+  },
+  "config": {
+    "blanket": {
+      "pattern": "sqlstring/lib",
+      "data-cover-flags": {
+        "debug": false
+      }
+    },
+    "travis-cov": {
+      "threshold": 20
+    }
+  },
+  "dependencies": {
+
+  },
+  "devDependencies": {
+    "autod": "*",
+    "blanket": "*",
+    "contributors": "*",
+    "cov": "*",
+    "coveralls": "*",
+    "mocha": "*",
+    "mocha-lcov-reporter": "*",
+    "should": "3.1.2",
+    "travis-cov": "*"
+  },
+  "homepage": "https://github.com/fengmk2/sqlstring",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/fengmk2/sqlstring.git",
+    "web": "https://github.com/fengmk2/sqlstring"
+  },
+  "bugs": {
+    "url": "https://github.com/fengmk2/sqlstring/issues",
+    "email": "fengmk2@gmail.com"
+  },
+  "keywords": [
+    "sqlstring",
+    "sql",
+    "escape",
+    "sql escape"
+  ],
+  "engines": {
+    "node": ">= 0.10.0"
+  },
+  "author": "fengmk2 <fengmk2@gmail.com> (http://fengmk2.github.com)",
+  "license": "MIT"
+}

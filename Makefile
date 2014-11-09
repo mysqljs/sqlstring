@@ -4,7 +4,7 @@ TIMEOUT = 1000
 MOCHA_OPTS =
 
 install:
-	@npm install --registry=http://registry.cnpmjs.org --cache=${HOME}/.npm/.cache/cnpm
+	@npm install
 
 test: install
 	@NODE_ENV=test ./node_modules/.bin/mocha \
@@ -30,4 +30,3 @@ contributors: install
 	@./node_modules/.bin/contributors -f plain -o AUTHORS
 
 .PHONY: test
-

@@ -31,14 +31,14 @@
     "should": "3.1.2",
     "travis-cov": "*"
   },
-  "homepage": "https://github.com/fengmk2/sqlstring",
+  "homepage": "https://github.com/node-modules/sqlstring",
   "repository": {
     "type": "git",
-    "url": "git://github.com/fengmk2/sqlstring.git",
-    "web": "https://github.com/fengmk2/sqlstring"
+    "url": "git://github.com/node-modules/sqlstring.git",
+    "web": "https://github.com/node-modules/sqlstring"
   },
   "bugs": {
-    "url": "https://github.com/fengmk2/sqlstring/issues",
+    "url": "https://github.com/node-modules/sqlstring/issues",
     "email": "fengmk2@gmail.com"
   },
   "keywords": [
@@ -48,7 +48,7 @@
     "sql escape"
   ],
   "engines": {
-    "node": ">= 0.10.0"
+    "node": ">= 0.8.0"
   },
   "author": "fengmk2 <fengmk2@gmail.com> (http://fengmk2.github.com)",
   "license": "MIT"

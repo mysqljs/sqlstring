@@ -1,6 +1,6 @@
 {
   "name": "sqlstring",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "SQL escape and format from mysql/lib/protocol/SqlString.js",
   "main": "index.js",
   "scripts": {

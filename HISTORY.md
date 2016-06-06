@@ -1,3 +1,8 @@
+unreleased
+==========
+
+  * Bring repository up-to-date with `mysql` module changes
+
 1.0.0 / 2014-11-09
 ==================
 

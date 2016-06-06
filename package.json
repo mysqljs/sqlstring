@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "SQL escape and format from mysql/lib/protocol/SqlString.js",
   "repository": "mysqljs/sqlstring",
-  "main": "index.js",
   "dependencies": {
 
   },

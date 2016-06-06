@@ -16,6 +16,7 @@
   ],
   "repository": "mysqljs/sqlstring",
   "devDependencies": {
+    "eslint": "2.11.1",
     "istanbul": "0.4.3",
     "mkdirp": "0.5.1",
     "require-all": "2.0.0",
@@ -33,6 +34,7 @@
     "node": ">= 0.6"
   },
   "scripts": {
+    "lint": "eslint lib/**/*.js index.js test/**/*.js",
     "test": "node test/run.js",
     "test-ci": "node test/run-cov.js lcovonly",
     "test-cov": "node test/run-cov.js"

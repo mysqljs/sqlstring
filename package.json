@@ -17,6 +17,12 @@
     "escape",
     "sql escape"
   ],
+  "files": [
+    "HISTORY.md",
+    "LICENSE",
+    "README.md",
+    "index.js"
+  ],
   "engines": {
     "node": ">= 0.8.0"
   },

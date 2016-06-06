@@ -21,7 +21,6 @@
 
   },
   "devDependencies": {
-    "autod": "*",
     "blanket": "*",
     "contributors": "*",
     "cov": "*",

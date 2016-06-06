@@ -22,10 +22,6 @@ test-coveralls: test
 
 test-all: test test-cov
 
-autod: install
-	@./node_modules/.bin/autod -w
-	@$(MAKE) install
-
 contributors: install
 	@./node_modules/.bin/contributors -f plain -o AUTHORS
 

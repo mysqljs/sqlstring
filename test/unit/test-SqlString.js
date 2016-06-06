@@ -129,6 +129,46 @@ test('SqlString.escape', {
     assert.strictEqual(string, "'" + expected + "'");
   },
 
+  'dates are converted to specified time zone "Z"': function() {
+    var expected = '2012-05-07 11:42:03.002';
+    var date     = new Date(Date.UTC(2012, 4, 7, 11, 42, 3, 2));
+    var string   = SqlString.escape(date, false, 'Z');
+
+    assert.strictEqual(string, "'" + expected + "'");
+  },
+
+  'dates are converted to specified time zone "+01"': function() {
+    var expected = '2012-05-07 12:42:03.002';
+    var date     = new Date(Date.UTC(2012, 4, 7, 11, 42, 3, 2));
+    var string   = SqlString.escape(date, false, '+01');
+
+    assert.strictEqual(string, "'" + expected + "'");
+  },
+
+  'dates are converted to specified time zone "+0200"': function() {
+    var expected = '2012-05-07 13:42:03.002';
+    var date     = new Date(Date.UTC(2012, 4, 7, 11, 42, 3, 2));
+    var string   = SqlString.escape(date, false, '+0200');
+
+    assert.strictEqual(string, "'" + expected + "'");
+  },
+
+  'dates are converted to specified time zone "-05:00"': function() {
+    var expected = '2012-05-07 06:42:03.002';
+    var date     = new Date(Date.UTC(2012, 4, 7, 11, 42, 3, 2));
+    var string   = SqlString.escape(date, false, '-05:00');
+
+    assert.strictEqual(string, "'" + expected + "'");
+  },
+
+  'dates are converted to UTC for unknown time zone': function() {
+    var date     = new Date(Date.UTC(2012, 4, 7, 11, 42, 3, 2));
+    var expected = SqlString.escape(date, false, 'Z');
+    var string   = SqlString.escape(date, false, 'foo');
+
+    assert.strictEqual(string, expected);
+  },
+
   'buffers are converted to hex': function() {
     var buffer = new Buffer([0, 1, 254, 255]);
     var string = SqlString.escape(buffer);

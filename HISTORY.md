@@ -1,3 +1,8 @@
+unreleased
+==========
+
+  * Fix npm package to include missing `lib/` directory
+
 2.0.0 / 2016-06-06
 ==================
 

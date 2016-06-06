@@ -1,30 +1,10 @@
-sqlstring
-=======
+# sqlstring
 
-[![NPM version][npm-image]][npm-url]
-[![build status][travis-image]][travis-url]
-[![Test coverage][coveralls-image]][coveralls-url]
-[![Gittip][gittip-image]][gittip-url]
-[![David deps][david-image]][david-url]
-[![node version][node-image]][node-url]
-[![npm download][download-image]][download-url]
-
-[npm-image]: https://img.shields.io/npm/v/sqlstring.svg?style=flat-square
-[npm-url]: https://npmjs.org/package/sqlstring
-[travis-image]: https://img.shields.io/travis/node-modules/sqlstring.svg?style=flat-square
-[travis-url]: https://travis-ci.org/node-modules/sqlstring
-[coveralls-image]: https://img.shields.io/coveralls/node-modules/sqlstring.svg?style=flat-square
-[coveralls-url]: https://coveralls.io/r/node-modules/sqlstring?branch=master
-[gittip-image]: https://img.shields.io/gittip/fengmk2.svg?style=flat-square
-[gittip-url]: https://www.gittip.com/fengmk2/
-[david-image]: https://img.shields.io/david/node-modules/sqlstring.svg?style=flat-square
-[david-url]: https://david-dm.org/node-modules/sqlstring
-[node-image]: https://img.shields.io/badge/node.js-%3E=_0.10-green.svg?style=flat-square
-[node-url]: http://nodejs.org/download/
-[download-image]: https://img.shields.io/npm/dm/sqlstring.svg?style=flat-square
-[download-url]: https://npmjs.org/package/sqlstring
-
-![logo](https://raw.github.com/node-modules/sqlstring/master/logo.png)
+[![NPM Version][npm-version-image]][npm-url]
+[![NPM Downloads][npm-downloads-image]][npm-url]
+[![Node.js Version][node-image]][node-url]
+[![Build Status][travis-image]][travis-url]
+[![Coverage Status][coveralls-image]][coveralls-url]
 
 SQL escape and format from [mysql/lib/protocol/SqlString.js](https://github.com/felixge/node-mysql/blob/master/lib/protocol/SqlString.js)
 
@@ -67,3 +47,13 @@ IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
 CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+\
+[npm-version-image]: https://img.shields.io/npm/v/sqlstring.svg
+[npm-downloads-image]: https://img.shields.io/npm/dm/sqlstring.svg
+[npm-url]: https://npmjs.org/package/sqlstring
+[travis-image]: https://img.shields.io/travis/mysqljs/sqlstring/master.svg
+[travis-url]: https://travis-ci.org/mysqljs/sqlstring
+[coveralls-image]: https://img.shields.io/coveralls/mysqljs/sqlstring/master.svg
+[coveralls-url]: https://coveralls.io/r/mysqljs/sqlstring?branch=master
+[node-image]: https://img.shields.io/node/v/sqlstring.svg
+[node-url]: https://nodejs.org/en/download

@@ -151,6 +151,11 @@ test('SqlString.format', {
     assert.equal(sql, "'a' and 'b'");
   },
 
+  'double quest marks are replaced with escaped id': function () {
+    var sql = SqlString.format('SELECT * FROM ?? WHERE id = ?', ['table', 42]);
+    assert.equal(sql, 'SELECT * FROM `table` WHERE id = 42');
+  },
+
   'extra question marks are left untouched': function() {
     var sql = SqlString.format('? and ?', ['a']);
     assert.equal(sql, "'a' and ?");

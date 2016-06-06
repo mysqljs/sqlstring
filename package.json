@@ -6,28 +6,13 @@
   "scripts": {
     "test": "make test-all"
   },
-  "config": {
-    "blanket": {
-      "pattern": "sqlstring/lib",
-      "data-cover-flags": {
-        "debug": false
-      }
-    },
-    "travis-cov": {
-      "threshold": 20
-    }
-  },
   "dependencies": {
 
   },
   "devDependencies": {
-    "blanket": "*",
-    "cov": "*",
-    "coveralls": "*",
+    "istanbul": "0.4.3",
     "mocha": "*",
-    "mocha-lcov-reporter": "*",
-    "should": "3.1.2",
-    "travis-cov": "*"
+    "should": "3.1.2"
   },
   "homepage": "https://github.com/node-modules/sqlstring",
   "repository": {

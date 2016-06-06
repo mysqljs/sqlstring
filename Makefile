@@ -14,11 +14,21 @@ test: install
 		$(TESTS)
 
 test-cov:
-	@$(MAKE) test -s MOCHA_OPTS='--require blanket' REPORTER=html-cov | ./node_modules/.bin/cov
+	@NODE_ENV=test ./node_modules/.bin/istanbul cover \
+		node_modules/mocha/bin/_mocha -- \
+		--reporter $(REPORTER) \
+		--timeout $(TIMEOUT) \
+		$(MOCHA_OPTS) \
+		$(TESTS)
 
-test-coveralls: test
-	@echo TRAVIS_JOB_ID $(TRAVIS_JOB_ID)
-	@-$(MAKE) test MOCHA_OPTS='--require blanket' REPORTER=mocha-lcov-reporter | ./node_modules/coveralls/bin/coveralls.js
+test-ci:
+	@NODE_ENV=test ./node_modules/.bin/istanbul cover \
+		node_modules/mocha/bin/_mocha -- \
+		--report lcovonly \
+		--reporter $(REPORTER) \
+		--timeout $(TIMEOUT) \
+		$(MOCHA_OPTS) \
+		$(TESTS)
 
 test-all: test test-cov
 

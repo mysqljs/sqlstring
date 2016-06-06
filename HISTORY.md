@@ -1,5 +1,5 @@
-unreleased
-==========
+2.0.0 / 2016-06-06
+==================
 
   * Bring repository up-to-date with `mysql` module changes
 

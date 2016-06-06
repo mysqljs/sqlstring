@@ -2,21 +2,23 @@
   "name": "sqlstring",
   "description": "Simple SQL escape and format for MySQL",
   "version": "1.0.0",
-  "repository": "mysqljs/sqlstring",
-  "dependencies": {
-
-  },
-  "devDependencies": {
-    "istanbul": "0.4.3",
-    "mocha": "*",
-    "should": "3.1.2"
-  },
+  "contributors": [
+    "Douglas Christopher Wilson <doug@somethingdoug.com>",
+    "fengmk2 <fengmk2@gmail.com> (http://fengmk2.github.com)"
+  ],
+  "license": "MIT",
   "keywords": [
     "sqlstring",
     "sql",
     "escape",
     "sql escape"
   ],
+  "repository": "mysqljs/sqlstring",
+  "devDependencies": {
+    "istanbul": "0.4.3",
+    "mocha": "*",
+    "should": "3.1.2"
+  },
   "files": [
     "HISTORY.md",
     "LICENSE",
@@ -24,10 +26,8 @@
     "index.js"
   ],
   "engines": {
-    "node": ">= 0.8.0"
+    "node": ">= 0.8"
   },
-  "author": "fengmk2 <fengmk2@gmail.com> (http://fengmk2.github.com)",
-  "license": "MIT",
   "scripts": {
     "test": "mocha --reporter spec --bail --check-leaks test/",
     "test-ci": "istanbul cover node_modules/mocha/bin/_mocha --report lcovonly -- --reporter spec --check-leaks test/",

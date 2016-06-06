@@ -1,7 +1,7 @@
 {
   "name": "sqlstring",
+  "description": "Simple SQL escape and format for MySQL",
   "version": "1.0.0",
-  "description": "SQL escape and format from mysql/lib/protocol/SqlString.js",
   "repository": "mysqljs/sqlstring",
   "dependencies": {
 

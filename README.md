@@ -6,7 +6,7 @@
 [![Build Status][travis-image]][travis-url]
 [![Coverage Status][coveralls-image]][coveralls-url]
 
-SQL escape and format from [mysql/lib/protocol/SqlString.js](https://github.com/felixge/node-mysql/blob/master/lib/protocol/SqlString.js)
+Simple SQL escape and format for MySQL
 
 ## Install
 

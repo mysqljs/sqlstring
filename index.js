@@ -1,5 +1,6 @@
 /**!
  * sqlstring
+ *   Copied from https://github.com/felixge/node-mysql/blob/master/lib/protocol/SqlString.js
  *
  * Copyright(c) 2014
  * MIT Licensed

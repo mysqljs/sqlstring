@@ -22,7 +22,6 @@
   },
   "devDependencies": {
     "blanket": "*",
-    "contributors": "*",
     "cov": "*",
     "coveralls": "*",
     "mocha": "*",

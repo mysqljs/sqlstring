@@ -25,6 +25,14 @@ test('SqlString.escapeId', {
     assert.equal(SqlString.escapeId(['a', 'b', 't.c']), "`a`, `b`, `t`.`c`");
   },
 
+  'sets are turned into lists': function() {
+    var set = new Set();
+    set.add('a');
+    set.add('b');
+    set.add('t.c');
+    assert.equal(SqlString.escapeId(set), "`a`, `b`, `t`.`c`");
+  },
+
   'nested arrays are flattened': function() {
     assert.equal(SqlString.escapeId(['a', ['b', ['t.c']]]), "`a`, `b`, `t`.`c`");
   }
@@ -64,8 +72,16 @@ test('SqlString.escape', {
     assert.equal(SqlString.escape([1, 2, 'c']), "1, 2, 'c'");
   },
 
+  'sets are turned into lists': function() {
+    assert.equal(SqlString.escape(new Set([1, 2, 'c'])), "1, 2, 'c'");
+  },
+
   'nested arrays are turned into grouped lists': function() {
     assert.equal(SqlString.escape([[1,2,3], [4,5,6], ['a', 'b', {nested: true}]]), "(1, 2, 3), (4, 5, 6), ('a', 'b', '[object Object]')");
+  },
+
+  'array of sets are turned into grouped lists': function() {
+    assert.equal(SqlString.escape([new Set([1,2,3]), new Set([4,5,6]), new Set(['a', 'b', {nested: true}])]), "(1, 2, 3), (4, 5, 6), ('a', 'b', '[object Object]')");
   },
 
   'nested objects inside arrays are cast to strings': function() {
@@ -191,6 +207,14 @@ test('SqlString.format', {
     assert.equal(sql, "'a' and 'b'");
   },
 
+  'question marks are replaced with escaped set values': function() {
+    var set = new Set();
+    set.add('a');
+    set.add('b');
+    var sql = SqlString.format('? and ?', set);
+    assert.equal(sql, "'a' and 'b'");
+  },
+
   'double quest marks are replaced with escaped id': function () {
     var sql = SqlString.format('SELECT * FROM ?? WHERE id = ?', ['table', 42]);
     assert.equal(sql, 'SELECT * FROM `table` WHERE id = 42');
@@ -203,6 +227,15 @@ test('SqlString.format', {
 
   'extra arguments are not used': function() {
     var sql = SqlString.format('? and ?', ['a', 'b', 'c']);
+    assert.equal(sql, "'a' and 'b'");
+  },
+
+  'extra arguments in a set are not used': function() {
+    var set = new Set();
+    set.add('a');
+    set.add('b');
+    set.add('c');
+    var sql = SqlString.format('? and ?', set);
     assert.equal(sql, "'a' and 'b'");
   },
 

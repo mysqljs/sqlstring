@@ -60,6 +60,13 @@ test('SqlString.escape', {
     assert.equal(SqlString.escape({a: 'b', c: 'd'}), "`a` = 'b', `c` = 'd'");
   },
 
+  'maps are turned into key value pairs': function() {
+    var map = new Map();
+    map.set('a', 'b');
+    map.set('c', 'd');
+    assert.equal(SqlString.escape(map), "`a` = 'b', `c` = 'd'");
+  },
+
   'objects function properties are ignored': function() {
     assert.equal(SqlString.escape({a: 'b', c: function() {}}), "`a` = 'b'");
   },
@@ -254,11 +261,31 @@ test('SqlString.format', {
     assert.equal(sql, "`hello` = 'world'");
   },
 
+  'maps is converted to values': function () {
+    var map = new Map();
+    map.set('hello', 'world');
+    var sql = SqlString.format('?', map, false);
+    assert.equal(sql, "`hello` = 'world'");
+  },
+
   'objects is not converted to values': function () {
     var sql = SqlString.format('?', { 'hello': 'world' }, true);
     assert.equal(sql, "'[object Object]'");
 
     var sql = SqlString.format('?', { toString: function () { return 'hello'; } }, true);
+    assert.equal(sql, "'hello'");
+  },
+
+  'maps is not converted to values': function () {
+    var map = new Map();
+    map.set('hello', 'world');
+
+    var sql = SqlString.format('?', map, true);
+    assert.equal(sql, "'[object Object]'");
+
+    map.toString = function () { return 'hello'; };
+
+    var sql = SqlString.format('?', map, true);
     assert.equal(sql, "'hello'");
   },
 

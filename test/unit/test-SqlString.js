@@ -1,6 +1,7 @@
-var assert    = require('assert');
-var SqlString = require('../common').SqlString;
-var test      = require('utest');
+var assert          = require('assert');
+var SqlString       = require('../common').SqlString;
+var test            = require('utest');
+var iterableSupport = require('../common').iterableSupport;
 
 test('SqlString.escapeId', {
   'value is quoted': function() {
@@ -26,6 +27,7 @@ test('SqlString.escapeId', {
   },
 
   'sets are turned into lists': function() {
+    if (!iterableSupport) return;
     var set = new Set();
     set.add('a');
     set.add('b');
@@ -61,6 +63,7 @@ test('SqlString.escape', {
   },
 
   'maps are turned into key value pairs': function() {
+    if (!iterableSupport) return;
     var map = new Map();
     map.set('a', 'b');
     map.set('c', 'd');
@@ -80,6 +83,7 @@ test('SqlString.escape', {
   },
 
   'sets are turned into lists': function() {
+    if (!iterableSupport) return;
     assert.equal(SqlString.escape(new Set([1, 2, 'c'])), "1, 2, 'c'");
   },
 
@@ -88,6 +92,7 @@ test('SqlString.escape', {
   },
 
   'array of sets are turned into grouped lists': function() {
+    if (!iterableSupport) return;
     assert.equal(SqlString.escape([new Set([1,2,3]), new Set([4,5,6]), new Set(['a', 'b', {nested: true}])]), "(1, 2, 3), (4, 5, 6), ('a', 'b', '[object Object]')");
   },
 
@@ -215,6 +220,7 @@ test('SqlString.format', {
   },
 
   'question marks are replaced with escaped set values': function() {
+    if (!iterableSupport) return;
     var set = new Set();
     set.add('a');
     set.add('b');
@@ -238,6 +244,7 @@ test('SqlString.format', {
   },
 
   'extra arguments in a set are not used': function() {
+    if (!iterableSupport) return;
     var set = new Set();
     set.add('a');
     set.add('b');
@@ -262,6 +269,7 @@ test('SqlString.format', {
   },
 
   'maps is converted to values': function () {
+    if (!iterableSupport) return;
     var map = new Map();
     map.set('hello', 'world');
     var sql = SqlString.format('?', map, false);
@@ -277,6 +285,7 @@ test('SqlString.format', {
   },
 
   'maps is not converted to values': function () {
+    if (!iterableSupport) return;
     var map = new Map();
     map.set('hello', 'world');
 

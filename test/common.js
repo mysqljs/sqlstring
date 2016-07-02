@@ -30,6 +30,5 @@ function writeCoverage(coverage) {
 }
 
 function isIterableSupported() {
-  if ('function' === typeof Map && 'function' === typeof Set) return true;
-  return false;
+  return 'function' === typeof Map && 'function' === typeof Set;
 }

@@ -30,7 +30,7 @@ test('SqlString.escapeId', {
   },
 
   'number is escaped': function() {
-    assert.equal(SqlString.escapeId(1), "`1`");
+    assert.equal(SqlString.escapeId(1), '`1`');
   }
 });
 

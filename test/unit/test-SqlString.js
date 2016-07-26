@@ -7,6 +7,10 @@ test('SqlString.escapeId', {
     assert.equal('`id`', SqlString.escapeId('id'));
   },
 
+  'value can be a number': function() {
+    assert.equal('`42`', SqlString.escapeId(42));
+  },
+
   'value containing escapes is quoted': function() {
     assert.equal('`i``d`', SqlString.escapeId('i`d'));
   },

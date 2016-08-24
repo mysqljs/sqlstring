@@ -175,7 +175,7 @@ test('SqlString.escape', {
       this.y = y;
     }
 
-    var expected = 'POINT(123.004, -10.1)';
+    var expected = 'POINT(123.004,-10.1)';
     var input    = new Point(123.004, -10.1);
     var string   = SqlString.escape(input);
 

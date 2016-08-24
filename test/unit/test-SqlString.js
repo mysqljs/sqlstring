@@ -169,6 +169,19 @@ test('SqlString.escape', {
     assert.strictEqual(string, expected);
   },
 
+  'points are converted to POINT objects': function() {
+    function Point(x, y) {
+      this.x = x;
+      this.y = y;
+    }
+
+    var expected = 'POINT(123.004, -10.1)';
+    var input    = new Point(123.004, -10.1);
+    var string   = SqlString.escape(input);
+
+    assert.strictEqual(string, expected);
+  },
+
   'buffers are converted to hex': function() {
     var buffer = new Buffer([0, 1, 254, 255]);
     var string = SqlString.escape(buffer);

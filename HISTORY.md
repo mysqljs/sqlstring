@@ -1,3 +1,8 @@
+unreleased
+==========
+
+  * Run `buffer.toString()` through escaping
+
 2.0.1 / 2016-06-06
 ==================
 

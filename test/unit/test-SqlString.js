@@ -176,6 +176,14 @@ test('SqlString.escape', {
     assert.strictEqual(string, "X'0001feff'");
   },
 
+  'buffers object cannot inject SQL': function() {
+    var buffer = new Buffer([0, 1, 254, 255]);
+    buffer.toString = function() { return "00' OR '1'='1"; };
+    var string = SqlString.escape(buffer);
+
+    assert.strictEqual(string, "X'00\\' OR \\'1\\'=\\'1'");
+  },
+
   'NaN -> NaN': function() {
     assert.equal(SqlString.escape(NaN), 'NaN');
   },

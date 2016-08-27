@@ -219,7 +219,7 @@ test('SqlString.escape', {
   'objects with toSQL() methods are passed "mysql" as first parameter': function() {
     function WithDialect() {
       this.toSQL = function(dialect) {
-        assert.strictEqual(string, 'mysql');
+        assert.strictEqual(dialect, 'mysql');
       }
     }
 

@@ -220,7 +220,7 @@ test('SqlString.escape', {
     function WithDialect() {
       this.toSQL = function(dialect) {
         assert.strictEqual(dialect, 'mysql');
-      }
+      };
     }
 
     var input    = new WithDialect();

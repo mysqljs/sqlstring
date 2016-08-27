@@ -74,6 +74,18 @@ test('SqlString.escape', {
     assert.equal(SqlString.escape({a: 'b', c: function() {}}), "`a` = 'b'");
   },
 
+  'object values toSqlString is called': function() {
+    assert.equal(SqlString.escape({id: { toSqlString: function() { return 'LAST_INSERT_ID()'; } }}), '`id` = LAST_INSERT_ID()');
+  },
+
+  'objects toSqlString is called': function() {
+    assert.equal(SqlString.escape({ toSqlString: function() { return '@foo_id'; } }), '@foo_id');
+  },
+
+  'objects toSqlString is not quoted': function() {
+    assert.equal(SqlString.escape({ toSqlString: function() { return 'CURRENT_TIMESTAMP()'; } }), 'CURRENT_TIMESTAMP()');
+  },
+
   'nested objects are cast to strings': function() {
     assert.equal(SqlString.escape({a: {nested: true}}), "`a` = '[object Object]'");
   },
@@ -272,6 +284,9 @@ test('SqlString.format', {
 
     var sql = SqlString.format('?', { toString: function () { return 'hello'; } }, true);
     assert.equal(sql, "'hello'");
+
+    var sql = SqlString.format('?', { toSqlString: function () { return '@foo'; } }, true);
+    assert.equal(sql, '@foo');
   },
 
   'sql is untouched if no values are provided': function () {

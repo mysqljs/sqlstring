@@ -1,5 +1,5 @@
-unreleased
-==========
+2.1.0 / 2016-09-26
+==================
 
   * Accept numbers and other value types in `escapeId`
   * Run `buffer.toString()` through escaping

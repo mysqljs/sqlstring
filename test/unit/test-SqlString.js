@@ -173,6 +173,13 @@ test('SqlString.escape', {
     assert.strictEqual(string, expected);
   },
 
+  'invalid dates are converted to null': function() {
+    var date   = new Date(NaN);
+    var string = SqlString.escape(date);
+
+    assert.strictEqual(string, 'NULL');
+  },
+
   'buffers are converted to hex': function() {
     var buffer = new Buffer([0, 1, 254, 255]);
     var string = SqlString.escape(buffer);

@@ -1,3 +1,8 @@
+unreleased
+==========
+
+  * Escape invalid `Date` objects as `NULL`
+
 2.1.0 / 2016-09-26
 ==================
 

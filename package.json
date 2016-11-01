@@ -3,6 +3,7 @@
   "description": "Simple SQL escape and format for MySQL",
   "version": "2.1.0",
   "contributors": [
+    "Adri Van Houdt <adri.van.houdt@gmail.com>",
     "Douglas Christopher Wilson <doug@somethingdoug.com>",
     "fengmk2 <fengmk2@gmail.com> (http://fengmk2.github.com)",
     "Nathan Woltman <nwoltman@outlook.com>"

@@ -1,5 +1,5 @@
-unreleased
-==========
+2.2.0 / 2016-11-01
+==================
 
   * Escape invalid `Date` objects as `NULL`
 

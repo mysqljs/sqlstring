@@ -35,8 +35,8 @@ test('SqlString.escapeId', {
 });
 
 test('SqlString.escape', {
-  'undefined -> NULL': function() {
-    assert.equal(SqlString.escape(undefined), 'NULL');
+  'undefined -> DEFAULT': function() {
+    assert.equal(SqlString.escape(undefined), 'DEFAULT');
   },
 
   'null -> NULL': function() {

@@ -201,7 +201,7 @@ test('SqlString.escape', {
     var b = SqlString.fn.CURRENT_TIMESTAMP();
 
     assert.strictEqual(SqlString.escape(a), 'POINT(123, 456)');
-    assert.strictEqual(SqlString.escape(b), 'CURRENT_TIMESTAMP');
+    assert.strictEqual(SqlString.escape(b), 'CURRENT_TIMESTAMP()');
   },
 
   'SqlString.fn escapes nested SQL functions properly, if Proxy is supported': function() {

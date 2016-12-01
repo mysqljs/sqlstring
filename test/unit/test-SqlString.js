@@ -211,7 +211,7 @@ test('SqlString.escape', {
 
     var fn = SqlString.fn.CONCAT(SqlString.fn.UPPER('abc'), SqlString.fn.LOWER('ABC'));
 
-    assert.strictEqual(SqlString.escape(fn), 'CONCAT(UPPER("abc"), LOWER("ABC"))');
+    assert.strictEqual(SqlString.escape(fn), "CONCAT(UPPER('abc'), LOWER('ABC'))");
   },
 
   'NaN -> NaN': function() {

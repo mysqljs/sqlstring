@@ -188,32 +188,30 @@ test('SqlString.escape', {
     assert.strictEqual(string, "X'00\\' OR \\'1\\'=\\'1'");
   },
 
-  'native objects with toSQL() properties are escaped': function() {
-    var expected = 'some bad sql syntax';
-    var input    = {
-      toSQL: function() {
-        return expected;
-      }
-    };
-
-    var string = SqlString.escape(input);
-
-    assert.strictEqual(string, expected);
+  'SqlString.fn is available if Proxy is supported, otherwise not': function() {
+    assert.equal(!!SqlString.fn, typeof Proxy === 'function');
   },
 
-  'class objects with toSQL() methods are escaped': function() {
-    var expected = 'more bad sql syntax';
+  'SqlString.fn escapes SQL functions properly, if Proxy is supported': function() {
+    if (typeof Proxy !== 'function') {
+      return;
+    }
 
-    function SomeClass() {}
+    var a = SqlString.fn.POINT(123, 456);
+    var b = SqlString.fn.CURRENT_TIMESTAMP();
 
-    SomeClass.prototype.toSQL = function() {
-      return expected;
-    };
+    assert.strictEqual(SqlString.escape(a), 'POINT(123, 456)');
+    assert.strictEqual(SqlString.escape(b), 'CURRENT_TIMESTAMP');
+  },
 
-    var input    = new SomeClass();
-    var string   = SqlString.escape(input);
+  'SqlString.fn escapes nested SQL functions properly, if Proxy is supported': function() {
+    if (typeof Proxy !== 'function') {
+      return;
+    }
 
-    assert.strictEqual(string, expected);
+    var fn = SqlString.fn.CONCAT(SqlString.fn.UPPER('abc'), SqlString.fn.LOWER('ABC'));
+
+    assert.strictEqual(SqlString.escape(fn), 'CONCAT(UPPER("abc"), LOWER("ABC"))');
   },
 
   'NaN -> NaN': function() {

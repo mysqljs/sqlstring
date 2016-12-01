@@ -216,17 +216,6 @@ test('SqlString.escape', {
     assert.strictEqual(string, expected);
   },
 
-  'objects with toSQL() methods are passed "mysql" as first parameter': function() {
-    function WithDialect() {
-      this.toSQL = function(dialect) {
-        assert.strictEqual(dialect, 'mysql');
-      };
-    }
-
-    var input    = new WithDialect();
-    var string   = SqlString.escape(input);
-  },
-
   'NaN -> NaN': function() {
     assert.equal(SqlString.escape(NaN), 'NaN');
   },

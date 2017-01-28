@@ -1,3 +1,14 @@
+2.2.0 / 2016-11-01
+==================
+
+  * Escape invalid `Date` objects as `NULL`
+
+2.1.0 / 2016-09-26
+==================
+
+  * Accept numbers and other value types in `escapeId`
+  * Run `buffer.toString()` through escaping
+
 2.0.1 / 2016-06-06
 ==================
 

@@ -76,7 +76,7 @@ to do neat things like this:
 
 ```js
 var post  = {id: 1, title: 'Hello MySQL'};
-var sql = SqlString.query('INSERT INTO posts SET ?', post);
+var sql = SqlString.format('INSERT INTO posts SET ?', post);
 console.log(sql); // INSERT INTO posts SET `id` = 1, `title` = 'Hello MySQL'
 ```
 
@@ -96,6 +96,7 @@ provided by a user, you should escape it with `SqlString.escapeId(identifier)` l
 ```js
 var sorter = 'date';
 var sql    = 'SELECT * FROM posts ORDER BY ' + SqlString.escapeId(sorter);
+// -> SELECT * FROM posts ORDER BY `date`
 ```
 
 It also supports adding qualified identifiers. It will escape both parts.
@@ -103,6 +104,16 @@ It also supports adding qualified identifiers. It will escape both parts.
 ```js
 var sorter = 'date';
 var sql    = 'SELECT * FROM posts ORDER BY ' + SqlString.escapeId('posts.' + sorter);
+// -> SELECT * FROM posts ORDER BY `posts`.`date`
+```
+
+If you do not want to treat `.` as qualified identifiers, you can set the second
+argument to `true` in order to keep the string as a literal identifier:
+
+```js
+var sorter = 'date.2';
+var sql    = 'SELECT * FROM posts ORDER BY ' + connection.escapeId(sorter, true);
+// -> SELECT * FROM posts ORDER BY `date.2`
 ```
 
 Alternatively, you can use `??` characters as placeholders for identifiers you would
@@ -111,12 +122,12 @@ like to have escaped like this:
 ```js
 var userId = 1;
 var columns = ['username', 'email'];
-var sql     = SqlString.query('SELECT ?? FROM ?? WHERE id = ?', [columns, 'users', userId]);
+var sql     = SqlString.format('SELECT ?? FROM ?? WHERE id = ?', [columns, 'users', userId]);
 console.log(sql); // SELECT `username`, `email` FROM `users` WHERE id = 1
 ```
 **Please note that this last character sequence is experimental and syntax might change**
 
-When you pass an Object to `.escape()` or `.query()`, `.escapeId()` is used to avoid SQL injection in object keys.
+When you pass an Object to `.escape()` or `.format()`, `.escapeId()` is used to avoid SQL injection in object keys.
 
 ### Formatting queries
 

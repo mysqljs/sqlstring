@@ -8,6 +8,10 @@ test('SqlString.escapeId', {
     assert.equal('`id`', SqlString.escapeId('id'));
   },
 
+  'value can be a number': function() {
+    assert.equal('`42`', SqlString.escapeId(42));
+  },
+
   'value containing escapes is quoted': function() {
     assert.equal('`i``d`', SqlString.escapeId('i`d'));
   },
@@ -15,9 +19,11 @@ test('SqlString.escapeId', {
   'value containing separator is quoted': function() {
     assert.equal('`id1`.`id2`', SqlString.escapeId('id1.id2'));
   },
+
   'value containing separator and escapes is quoted': function() {
     assert.equal('`id``1`.`i``d2`', SqlString.escapeId('id`1.i`d2'));
   },
+
   'value containing separator is fully escaped when forbidQualified': function() {
     assert.equal('`id1.id2`', SqlString.escapeId('id1.id2', true));
   },
@@ -197,11 +203,26 @@ test('SqlString.escape', {
     assert.strictEqual(string, expected);
   },
 
+  'invalid dates are converted to null': function() {
+    var date   = new Date(NaN);
+    var string = SqlString.escape(date);
+
+    assert.strictEqual(string, 'NULL');
+  },
+
   'buffers are converted to hex': function() {
     var buffer = new Buffer([0, 1, 254, 255]);
     var string = SqlString.escape(buffer);
 
     assert.strictEqual(string, "X'0001feff'");
+  },
+
+  'buffers object cannot inject SQL': function() {
+    var buffer = new Buffer([0, 1, 254, 255]);
+    buffer.toString = function() { return "00' OR '1'='1"; };
+    var string = SqlString.escape(buffer);
+
+    assert.strictEqual(string, "X'00\\' OR \\'1\\'=\\'1'");
   },
 
   'NaN -> NaN': function() {

@@ -29,6 +29,7 @@
     "no-trailing-spaces": 2,
     "no-unexpected-multiline": 2,
     "no-unreachable": 2,
+    "no-unused-vars": 2,
     "semi": [2, "always"],
     "use-isnan": 2,
     "valid-jsdoc": 2,

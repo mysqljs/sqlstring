@@ -6,6 +6,7 @@
     "comma-dangle": [2, "never"],
     "consistent-return": 2,
     "indent": ["error", 2, {"SwitchCase": 1}],
+    "key-spacing": [2, { "align": { "beforeColon": true, "afterColon": true, "on": "colon" } }],
     "no-cond-assign": 2,
     "no-constant-condition": 2,
     "no-control-regex": 2,

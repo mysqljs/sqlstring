@@ -9,6 +9,8 @@ common.root = path.resolve(__dirname, '..', (process.env.TEST_COVERAGE || ''));
 // Export module
 common.SqlString = require(common.root + '/index');
 
+common.iterableSupport = isIterableSupported();
+
 // Setup coverage hook
 if (process.env.TEST_COVERAGE) {
   process.on('exit', function () {
@@ -25,4 +27,8 @@ function writeCoverage(coverage) {
   mkdirp.sync(path.dirname(out));
 
   fs.writeFileSync(out, JSON.stringify(coverage));
+}
+
+function isIterableSupported() {
+  return 'function' === typeof Map && 'function' === typeof Set;
 }

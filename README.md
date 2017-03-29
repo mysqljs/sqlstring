@@ -10,7 +10,7 @@ Simple SQL escape and format for MySQL
 
 ## Install
 
-```bash
+```sh
 $ npm install sqlstring
 ```
 

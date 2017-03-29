@@ -1,5 +1,5 @@
 var assert    = require('assert');
-var SqlString = require('../common').SqlString;
+var SqlString = require('../../');
 var test      = require('utest');
 
 test('SqlString.escapeId', {

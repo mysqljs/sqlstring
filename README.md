@@ -16,6 +16,8 @@ $ npm install sqlstring
 
 ## Usage
 
+<!-- eslint-disable no-unused-vars -->
+
 ```js
 var SqlString = require('sqlstring');
 ```
@@ -29,13 +31,16 @@ provided data before using it inside a SQL query. You can do so using the
 ```js
 var userId = 'some user provided value';
 var sql    = 'SELECT * FROM users WHERE id = ' + SqlString.escape(userId);
+console.log(sql); // SELECT * FROM users WHERE id = 'some user provided value'
 ```
 
 Alternatively, you can use `?` characters as placeholders for values you would
 like to have escaped like this:
 
 ```js
-var sql = SqlString.format('SELECT * FROM users WHERE id = ?', [userId]);
+var userId = 1;
+var sql    = SqlString.format('SELECT * FROM users WHERE id = ?', [userId]);
+console.log(sql); // SELECT * FROM users WHERE id = 1
 ```
 
 Multiple placeholders are mapped to values in the same order as passed. For example,
@@ -43,7 +48,10 @@ in the following query `foo` equals `a`, `bar` equals `b`, `baz` equals `c`, and
 `id` will be `userId`:
 
 ```js
-var sql = SqlString.format('UPDATE users SET foo = ?, bar = ?, baz = ? WHERE id = ?', ['a', 'b', 'c', userId]);
+var userId = 1;
+var sql    = SqlString.format('UPDATE users SET foo = ?, bar = ?, baz = ? WHERE id = ?',
+  ['a', 'b', 'c', userId]);
+console.log(sql); // UPDATE users SET foo = 'a', bar = 'b', baz = 'c' WHERE id = 1
 ```
 
 This looks similar to prepared statements in MySQL, however it really just uses
@@ -96,7 +104,7 @@ provided by a user, you should escape it with `SqlString.escapeId(identifier)` l
 ```js
 var sorter = 'date';
 var sql    = 'SELECT * FROM posts ORDER BY ' + SqlString.escapeId(sorter);
-// -> SELECT * FROM posts ORDER BY `date`
+console.log(sql); // SELECT * FROM posts ORDER BY `date`
 ```
 
 It also supports adding qualified identifiers. It will escape both parts.
@@ -104,7 +112,7 @@ It also supports adding qualified identifiers. It will escape both parts.
 ```js
 var sorter = 'date';
 var sql    = 'SELECT * FROM posts ORDER BY ' + SqlString.escapeId('posts.' + sorter);
-// -> SELECT * FROM posts ORDER BY `posts`.`date`
+console.log(sql); // SELECT * FROM posts ORDER BY `posts`.`date`
 ```
 
 If you do not want to treat `.` as qualified identifiers, you can set the second
@@ -113,7 +121,7 @@ argument to `true` in order to keep the string as a literal identifier:
 ```js
 var sorter = 'date.2';
 var sql    = 'SELECT * FROM posts ORDER BY ' + connection.escapeId(sorter, true);
-// -> SELECT * FROM posts ORDER BY `date.2`
+console.log(sql); // SELECT * FROM posts ORDER BY `date.2`
 ```
 
 Alternatively, you can use `??` characters as placeholders for identifiers you would
@@ -135,8 +143,10 @@ You can use `SqlString.format` to prepare a query with multiple insertion points
 utilizing the proper escaping for ids and values. A simple example of this follows:
 
 ```js
+var userId  = 1;
 var inserts = ['users', 'id', userId];
 var sql     = SqlString.format('SELECT * FROM ?? WHERE ?? = ?', inserts);
+console.log(sql); // SELECT * FROM `users` WHERE `id` = 1
 ```
 
 Following this you then have a valid, escaped query that you can then send to the database safely.

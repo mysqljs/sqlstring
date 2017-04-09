@@ -88,6 +88,18 @@ var sql = SqlString.format('INSERT INTO posts SET ?', post);
 console.log(sql); // INSERT INTO posts SET `id` = 1, `title` = 'Hello MySQL'
 ```
 
+There are also tags to be used with template strings in `sqlstring/tags`:
+
+```js
+var SqlStringTags = require('sqlstring/tags');
+var userId = 1;
+var bar = {bar: 'b'};
+var sql    = SqlStringTags.escape `UPDATE users SET foo = ${'a'}, ${bar}, baz = ${'c'} WHERE id = ${userId}`;
+console.log(sql); // UPDATE users SET foo = 'a', bar = 'b', baz = 'c' WHERE id = 1
+var sql    = SqlStringTags.escapeStringifyObjects `UPDATE users SET foo = ${'a'}, ${bar}, baz = ${'c'} WHERE id = ${userId}`;
+console.log(sql); // UPDATE users SET foo = 'a', '[object Object]', baz = 'c' WHERE id = 1
+```
+
 If you feel the need to escape queries by yourself, you can also use the escaping
 function directly:
 
@@ -135,6 +147,17 @@ console.log(sql); // SELECT `username`, `email` FROM `users` WHERE id = 1
 ```
 **Please note that this last character sequence is experimental and syntax might change**
 
+There are also tags to be used with template strings in `sqlstring/tags`:
+
+```js
+var SqlStringTags = require('sqlstring/tags');
+var columns = ['users.username', 'email'];
+var sql     = SqlStringTags.escapeId `SELECT ${columns} FROM ${'users'}`;
+console.log(sql); // SELECT `users`.`username`, `email` FROM `users`
+sql         = SqlStringTags.escapeIdForbidQualified `SELECT ${columns} FROM ${'users'}`;
+console.log(sql); // SELECT `users.username`, `email` FROM `users`
+```
+
 When you pass an Object to `.escape()` or `.format()`, `.escapeId()` is used to avoid SQL injection in object keys.
 
 ### Formatting queries
@@ -154,6 +177,21 @@ This is useful if you are looking to prepare the query before actually sending i
 You also have the option (but are not required) to pass in `stringifyObject` and `timeZone`,
 allowing you provide a custom means of turning objects into strings, as well as a
 location-specific/timezone-aware `Date`.
+
+There are also tags to be used with template strings in `sqlstring/tags`:
+
+```js
+var SqlStringTags = require('sqlstring/tags');
+var userId  = 1;
+var columns = ['users.username', 'email'];
+var values  = [userId, {givenname: 'example'}];
+var sql     = (SqlStringTags.generateFormatFunction `SELECT ${columns} FROM ${'users'} WHERE ${'id'} = ? AND ?`)(values);
+console.log(sql); // SELECT `users`.`username`, `email` FROM `users` WHERE id = 1 AND givenname = 'example'
+var sql     = (SqlStringTags.generateFormatFunction(true) `SELECT ${columns} FROM ${'users'} WHERE ${'id'} = ? AND ?`)(values);
+console.log(sql); // SELECT `users.username`, `email` FROM `users` WHERE id = 1 AND givenname = 'example'
+var sql     = (SqlStringTags.generateFormatFunction `SELECT ${columns} FROM ${'users'} WHERE ${'id'} = ? AND ?`)(values, true);
+console.log(sql); // SELECT `users`.`username`, `email` FROM `users` WHERE id = 1 AND '[object Object]'
+```
 
 ## License
 

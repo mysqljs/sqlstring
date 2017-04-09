@@ -91,6 +91,7 @@ console.log(sql); // INSERT INTO posts SET `id` = 1, `title` = 'Hello MySQL'
 There are also tags to be used with template strings in `sqlstring/tags`:
 
 ```js
+/*eslint-env es6*/
 var SqlStringTags = require('sqlstring/tags');
 var userId = 1;
 var bar = {bar: 'b'};
@@ -150,6 +151,7 @@ console.log(sql); // SELECT `username`, `email` FROM `users` WHERE id = 1
 There are also tags to be used with template strings in `sqlstring/tags`:
 
 ```js
+/*eslint-env es6*/
 var SqlStringTags = require('sqlstring/tags');
 var columns = ['users.username', 'email'];
 var sql     = SqlStringTags.escapeId `SELECT ${columns} FROM ${'users'}`;
@@ -181,6 +183,7 @@ location-specific/timezone-aware `Date`.
 There are also tags to be used with template strings in `sqlstring/tags`:
 
 ```js
+/*eslint-env es6*/
 var SqlStringTags = require('sqlstring/tags');
 var userId  = 1;
 var columns = ['users.username', 'email'];

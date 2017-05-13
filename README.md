@@ -120,7 +120,7 @@ argument to `true` in order to keep the string as a literal identifier:
 
 ```js
 var sorter = 'date.2';
-var sql    = 'SELECT * FROM posts ORDER BY ' + connection.escapeId(sorter, true);
+var sql    = 'SELECT * FROM posts ORDER BY ' + SqlString.escapeId(sorter, true);
 console.log(sql); // SELECT * FROM posts ORDER BY `date.2`
 ```
 

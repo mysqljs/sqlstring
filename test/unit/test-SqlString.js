@@ -258,5 +258,50 @@ test('SqlString.format', {
   'sql is untouched if values are provided but there are no placeholders': function () {
     var sql = SqlString.format('SELECT COUNT(*) FROM table', ['a', 'b']);
     assert.equal(sql, 'SELECT COUNT(*) FROM table');
+  },
+  // Named placeholder tests
+  'named placeholders should be replaced with values if values are provided': function () {
+    var sql = SqlString.format('SELECT * FROM ::table WHERE hello = :world AND foo = :bar AND ::world IN [:worlds]', {table: 'tester', bar: 'bar', world: 'world', worlds: ['earth', 'mars']});
+    assert.equal(sql, "SELECT * FROM `tester` WHERE hello = 'world' AND foo = 'bar' AND `world` IN ['earth', 'mars']");
+  },
+
+  'question mark placeholders values that contain colons do not cause issues': function() {
+    var sql = SqlString.format('? and ?', [':hello', '::b']);
+    assert.equal(sql, "':hello' and '::b'");
+  },
+
+  'named placeholders with values that contain colons do not cause issues': function() {
+    var sql = SqlString.format(':a and ::b', {a: ':hello', b: '::b'});
+    assert.equal(sql, "':hello' and `::b`");
+  },
+
+  'named placeholders with values that contain question marks do not cause issues': function() {
+    var sql = SqlString.format(':a and :b', {a: 'hello?', b: 'b'});
+    assert.equal(sql, "'hello?' and 'b'");
+  },
+
+  'extra named placeholders are left un-touched': function() {
+    var sql = SqlString.format(':a and :b and :c and ::c and :b and ::a', {a: 'a', c: 'c'});
+    assert.equal(sql, "'a' and :b and 'c' and `c` and :b and `a`");
+  },
+
+  'name placeholders are left un-touched and question marks are replace when an array is specified': function() {
+    var sql = SqlString.format('SELECT * FROM ?? WHERE a = ? AND b = :b AND c = ?', ['tester', 'a', 'c']);
+    assert.equal(sql, "SELECT * FROM `tester` WHERE a = 'a' AND b = :b AND c = 'c'");
+  },
+
+  'name placeholders are left un-touched and question marks are replace when a single value is specified': function() {
+    var sql = SqlString.format('SELECT * FROM tester WHERE a = ? AND b = :b', 'a');
+    assert.equal(sql, "SELECT * FROM tester WHERE a = 'a' AND b = :b");
+  },
+
+  'name placeholders are replace for columns': function() {
+    var sql = SqlString.format('SELECT ::columns FROM ::table WHERE id = :id', {columns: ['username', 'email'], table: 'users', id: 1});
+    assert.equal(sql, "SELECT `username`, `email` FROM `users` WHERE id = 1");
+  },
+
+  'named placeholders are left un-touched when empty object is passed for values': function() {
+    var sql = SqlString.format(':a and :b and :c and ::c and :b and ::a', {});
+    assert.equal(sql, ":a and :b and :c and ::c and :b and ::a");
   }
 });

@@ -57,6 +57,15 @@ console.log(sql); // UPDATE users SET foo = 'a', bar = 'b', baz = 'c' WHERE id =
 This looks similar to prepared statements in MySQL, however it really just uses
 the same `SqlString.escape()` method internally.
 
+Alternatively, you can use named placeholders and pass in an object for the values:
+
+```js
+var userId = 1;
+var sql    = SqlString.format('UPDATE users SET foo = :foo, bar = :bar, baz = :baz WHERE id = :id',
+  {a: 'a', b: 'b', c: 'c', id: userId});
+console.log(sql); // UPDATE users SET foo = 'a', bar = 'b', baz = 'c' WHERE id = 1
+```
+
 **Caution** This also differs from prepared statements in that all `?` are
 replaced, even those contained in comments and strings.
 
@@ -136,6 +145,15 @@ console.log(sql); // SELECT `username`, `email` FROM `users` WHERE id = 1
 **Please note that this last character sequence is experimental and syntax might change**
 
 When you pass an Object to `.escape()` or `.format()`, `.escapeId()` is used to avoid SQL injection in object keys.
+
+Alternatively, you can use named placeholders (pre fixed with 2 colons) for identifiers and pass in an object for the values:
+
+```js
+var userId = 1;
+var columns = ['username', 'email'];
+var sql     = SqlString.format('SELECT ::columns FROM ::table WHERE id = :id', {columns: columns, table: 'users', id: userId});
+console.log(sql); // SELECT `username`, `email` FROM `users` WHERE id = 1
+```
 
 ### Formatting queries
 

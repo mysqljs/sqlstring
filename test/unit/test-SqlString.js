@@ -298,5 +298,10 @@ test('SqlString.format', {
   'name placeholders are replace for columns': function() {
     var sql = SqlString.format('SELECT ::columns FROM ::table WHERE id = :id', {columns: ['username', 'email'], table: 'users', id: 1});
     assert.equal(sql, "SELECT `username`, `email` FROM `users` WHERE id = 1");
-  }
+  },
+
+  'named placeholders are left un-touched when empty object is passed for values': function() {
+    var sql = SqlString.format(':a and :b and :c and ::c and :b and ::a', {});
+    assert.equal(sql, ":a and :b and :c and ::c and :b and ::a");
+  },
 });

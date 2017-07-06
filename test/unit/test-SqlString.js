@@ -303,5 +303,5 @@ test('SqlString.format', {
   'named placeholders are left un-touched when empty object is passed for values': function() {
     var sql = SqlString.format(':a and :b and :c and ::c and :b and ::a', {});
     assert.equal(sql, ":a and :b and :c and ::c and :b and ::a");
-  },
+  }
 });

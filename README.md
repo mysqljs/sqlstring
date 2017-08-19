@@ -92,7 +92,7 @@ If you feel the need to escape queries by yourself, you can also use the escapin
 function directly:
 
 ```js
-var sql = 'SELECT * FROM posts WHERE title=' + SqlString.escape("Hello MySQL");
+var sql = 'SELECT * FROM posts WHERE title=' + SqlString.escape('Hello MySQL');
 console.log(sql); // SELECT * FROM posts WHERE title='Hello MySQL'
 ```
 

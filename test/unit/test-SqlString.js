@@ -78,6 +78,14 @@ test('SqlString.escape', {
     assert.equal(SqlString.escape({a: {nested: true}}), "`a` = '[object Object]'");
   },
 
+  'nested objects use toString': function() {
+    assert.equal(SqlString.escape({a: { toString: function() { return 'foo'; } }}), "`a` = 'foo'");
+  },
+
+  'nested objects use toString is quoted': function() {
+    assert.equal(SqlString.escape({a: { toString: function() { return "f'oo"; } }}), "`a` = 'f\\'oo'");
+  },
+
   'arrays are turned into lists': function() {
     assert.equal(SqlString.escape([1, 2, 'c']), "1, 2, 'c'");
   },
@@ -88,6 +96,10 @@ test('SqlString.escape', {
 
   'nested objects inside arrays are cast to strings': function() {
     assert.equal(SqlString.escape([1, {nested: true}, 2]), "1, '[object Object]', 2");
+  },
+
+  'nested objects inside arrays use toString': function() {
+    assert.equal(SqlString.escape([1, { toString: function() { return 'foo'; } }, 2]), "1, 'foo', 2");
   },
 
   'strings are quoted': function() {

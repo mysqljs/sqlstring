@@ -11,6 +11,18 @@ test('SqlString.escapeId', {
     assert.equal(SqlString.escapeId(42), '`42`');
   },
 
+  'value can be an object': function() {
+    assert.equal(SqlString.escapeId({}), '`[object Object]`');
+  },
+
+  'value toString is called': function() {
+    assert.equal(SqlString.escapeId({ toString: function() { return 'foo'; } }), '`foo`');
+  },
+
+  'value toString is quoted': function() {
+    assert.equal(SqlString.escapeId({ toString: function() { return 'f`oo'; } }), '`f``oo`');
+  },
+
   'value containing escapes is quoted': function() {
     assert.equal(SqlString.escapeId('i`d'), '`i``d`');
   },

@@ -4,27 +4,27 @@ var test      = require('utest');
 
 test('SqlString.escapeId', {
   'value is quoted': function() {
-    assert.equal('`id`', SqlString.escapeId('id'));
+    assert.equal(SqlString.escapeId('id'), '`id`');
   },
 
   'value can be a number': function() {
-    assert.equal('`42`', SqlString.escapeId(42));
+    assert.equal(SqlString.escapeId(42), '`42`');
   },
 
   'value containing escapes is quoted': function() {
-    assert.equal('`i``d`', SqlString.escapeId('i`d'));
+    assert.equal(SqlString.escapeId('i`d'), '`i``d`');
   },
 
   'value containing separator is quoted': function() {
-    assert.equal('`id1`.`id2`', SqlString.escapeId('id1.id2'));
+    assert.equal(SqlString.escapeId('id1.id2'), '`id1`.`id2`');
   },
 
   'value containing separator and escapes is quoted': function() {
-    assert.equal('`id``1`.`i``d2`', SqlString.escapeId('id`1.i`d2'));
+    assert.equal(SqlString.escapeId('id`1.i`d2'), '`id``1`.`i``d2`');
   },
 
   'value containing separator is fully escaped when forbidQualified': function() {
-    assert.equal('`id1.id2`', SqlString.escapeId('id1.id2', true));
+    assert.equal(SqlString.escapeId('id1.id2', true), '`id1.id2`');
   },
 
   'arrays are turned into lists': function() {

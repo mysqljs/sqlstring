@@ -101,6 +101,19 @@ var sql = SqlString.format('UPDATE posts SET modified = ? WHERE id = ?', [CURREN
 console.log(sql); // UPDATE posts SET modified = CURRENT_TIMESTAMP() WHERE id = 42
 ```
 
+To generate objects with a `toSqlString` method, the `SqlString.raw()` method can
+be used. This creates an object that will be left un-touched when using in a `?`
+placeholder, useful for using functions as dynamic values:
+
+**Caution** The string provided to `SqlString.raw()` will skip all escaping
+functions when used, so be careful when passing in unvalidated input.
+
+```js
+var CURRENT_TIMESTAMP = SqlString.raw('CURRENT_TIMESTAMP()');
+var sql = SqlString.format('UPDATE posts SET modified = ? WHERE id = ?', [CURRENT_TIMESTAMP, 42]);
+console.log(sql); // UPDATE posts SET modified = CURRENT_TIMESTAMP() WHERE id = 42
+```
+
 If you feel the need to escape queries by yourself, you can also use the escaping
 function directly:
 

@@ -66,6 +66,10 @@ test('SqlString.escape', {
     assert.equal(SqlString.escape(5), '5');
   },
 
+  'raw not escaped': function () {
+    assert.equal(SqlString.escape(SqlString.raw('NOW()')), 'NOW()');
+  },
+
   'objects are turned into key value pairs': function() {
     assert.equal(SqlString.escape({a: 'b', c: 'd'}), "`a` = 'b', `c` = 'd'");
   },
@@ -297,5 +301,31 @@ test('SqlString.format', {
   'sql is untouched if values are provided but there are no placeholders': function () {
     var sql = SqlString.format('SELECT COUNT(*) FROM table', ['a', 'b']);
     assert.equal(sql, 'SELECT COUNT(*) FROM table');
+  }
+});
+
+test('SqlString.raw', {
+  'creates object': function() {
+    assert.equal(typeof SqlString.raw('NOW()'), 'object');
+  },
+
+  'rejects number': function() {
+    assert.throws(function () {
+      SqlString.raw(42);
+    });
+  },
+
+  'rejects undefined': function() {
+    assert.throws(function () {
+      SqlString.raw();
+    });
+  },
+
+  'object has toSqlString': function() {
+    assert.equal(typeof SqlString.raw('NOW()').toSqlString, 'function');
+  },
+
+  'toSqlString returns sql as-is': function() {
+    assert.equal(SqlString.raw("NOW() AS 'current_time'").toSqlString(), "NOW() AS 'current_time'");
   }
 });

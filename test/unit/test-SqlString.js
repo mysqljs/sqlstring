@@ -33,6 +33,10 @@ test('SqlString.escapeId', {
 
   'nested arrays are flattened': function() {
     assert.equal(SqlString.escapeId(['a', ['b', ['t.c']]]), "`a`, `b`, `t`.`c`");
+  },
+
+  'instances of Escaped are not quoted': function() {
+    assert.equal(SqlString.escapeId(SqlString.escaped('@a := 42')), "@a := 42");
   }
 });
 
@@ -80,6 +84,10 @@ test('SqlString.escape', {
 
   'strings are quoted': function() {
     assert.equal(SqlString.escape('Super'), "'Super'");
+  },
+
+  'instances of Escaped get not escaped': function() {
+    assert.equal(SqlString.escape({a: SqlString.escaped('@a')}), "`a` = @a");
   },
 
   '\0 gets escaped': function() {

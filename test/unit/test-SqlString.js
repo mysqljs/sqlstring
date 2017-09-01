@@ -221,6 +221,32 @@ test('SqlString.escape', {
     assert.strictEqual(string, "X'00\\' OR \\'1\\'=\\'1'");
   },
 
+  'SqlString.fn is available if Proxy is supported, otherwise not': function() {
+    assert.equal(!!SqlString.fn, typeof Proxy === 'function');
+  },
+
+  'SqlString.fn escapes SQL functions properly, if Proxy is supported': function() {
+    if (typeof Proxy !== 'function') {
+      return;
+    }
+
+    var a = SqlString.fn.POINT(123, 456);
+    var b = SqlString.fn.CURRENT_TIMESTAMP();
+
+    assert.strictEqual(SqlString.escape(a), 'POINT(123, 456)');
+    assert.strictEqual(SqlString.escape(b), 'CURRENT_TIMESTAMP()');
+  },
+
+  'SqlString.fn escapes nested SQL functions properly, if Proxy is supported': function() {
+    if (typeof Proxy !== 'function') {
+      return;
+    }
+
+    var fn = SqlString.fn.CONCAT(SqlString.fn.UPPER('abc'), SqlString.fn.LOWER('ABC'));
+
+    assert.strictEqual(SqlString.escape(fn), "CONCAT(UPPER('abc'), LOWER('ABC'))");
+  },
+
   'NaN -> NaN': function() {
     assert.equal(SqlString.escape(NaN), 'NaN');
   },

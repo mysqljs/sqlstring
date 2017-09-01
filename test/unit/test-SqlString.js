@@ -221,6 +221,45 @@ test('SqlString.escape', {
     assert.strictEqual(string, "X'00\\' OR \\'1\\'=\\'1'");
   },
 
+  'native objects with toSQL() properties are escaped': function() {
+    var expected = 'some bad sql syntax';
+    var input    = {
+      toSQL: function() {
+        return expected;
+      }
+    };
+
+    var string = SqlString.escape(input);
+
+    assert.strictEqual(string, expected);
+  },
+
+  'class objects with toSQL() methods are escaped': function() {
+    var expected = 'more bad sql syntax';
+
+    function SomeClass() {}
+
+    SomeClass.prototype.toSQL = function() {
+      return expected;
+    };
+
+    var input    = new SomeClass();
+    var string   = SqlString.escape(input);
+
+    assert.strictEqual(string, expected);
+  },
+
+  'objects with toSQL() methods are passed "mysql" as first parameter': function() {
+    function WithDialect() {
+      this.toSQL = function(dialect) {
+        assert.strictEqual(dialect, 'mysql');
+      };
+    }
+
+    var input    = new WithDialect();
+    var string   = SqlString.escape(input);
+  },
+
   'NaN -> NaN': function() {
     assert.equal(SqlString.escape(NaN), 'NaN');
   },

@@ -48,7 +48,7 @@ test('SqlString.escapeId', {
   },
 
   'instances of Escaped are not quoted': function() {
-    assert.equal(SqlString.escapeId(SqlString.escaped('@a := 42')), "@a := 42");
+    assert.equal(SqlString.escapeId(SqlString.escaped('@a := 42')), '@a := 42');
   }
 });
 
@@ -123,7 +123,7 @@ test('SqlString.escape', {
   },
 
   'instances of Escaped get not escaped': function() {
-    assert.equal(SqlString.escape({a: SqlString.escaped('@a')}), "`a` = @a");
+    assert.equal(SqlString.escape({a: SqlString.escaped('@a')}), '`a` = @a');
   },
 
   '\0 gets escaped': function() {

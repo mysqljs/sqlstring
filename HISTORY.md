@@ -1,3 +1,8 @@
+unreleased
+==========
+
+  * Add `.toSqlString()` escape overriding
+
 2.2.0 / 2016-11-01
 ==================
 

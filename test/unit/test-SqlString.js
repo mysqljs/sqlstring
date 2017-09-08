@@ -4,35 +4,47 @@ var test      = require('utest');
 
 test('SqlString.escapeId', {
   'value is quoted': function() {
-    assert.equal('`id`', SqlString.escapeId('id'));
+    assert.equal(SqlString.escapeId('id'), '`id`');
   },
 
   'value can be a number': function() {
-    assert.equal('`42`', SqlString.escapeId(42));
+    assert.equal(SqlString.escapeId(42), '`42`');
+  },
+
+  'value can be an object': function() {
+    assert.equal(SqlString.escapeId({}), '`[object Object]`');
+  },
+
+  'value toString is called': function() {
+    assert.equal(SqlString.escapeId({ toString: function() { return 'foo'; } }), '`foo`');
+  },
+
+  'value toString is quoted': function() {
+    assert.equal(SqlString.escapeId({ toString: function() { return 'f`oo'; } }), '`f``oo`');
   },
 
   'value containing escapes is quoted': function() {
-    assert.equal('`i``d`', SqlString.escapeId('i`d'));
+    assert.equal(SqlString.escapeId('i`d'), '`i``d`');
   },
 
   'value containing separator is quoted': function() {
-    assert.equal('`id1`.`id2`', SqlString.escapeId('id1.id2'));
+    assert.equal(SqlString.escapeId('id1.id2'), '`id1`.`id2`');
   },
 
   'value containing separator and escapes is quoted': function() {
-    assert.equal('`id``1`.`i``d2`', SqlString.escapeId('id`1.i`d2'));
+    assert.equal(SqlString.escapeId('id`1.i`d2'), '`id``1`.`i``d2`');
   },
 
   'value containing separator is fully escaped when forbidQualified': function() {
-    assert.equal('`id1.id2`', SqlString.escapeId('id1.id2', true));
+    assert.equal(SqlString.escapeId('id1.id2', true), '`id1.id2`');
   },
 
   'arrays are turned into lists': function() {
-    assert.equal(SqlString.escapeId(['a', 'b', 't.c']), "`a`, `b`, `t`.`c`");
+    assert.equal(SqlString.escapeId(['a', 'b', 't.c']), '`a`, `b`, `t`.`c`');
   },
 
   'nested arrays are flattened': function() {
-    assert.equal(SqlString.escapeId(['a', ['b', ['t.c']]]), "`a`, `b`, `t`.`c`");
+    assert.equal(SqlString.escapeId(['a', ['b', ['t.c']]]), '`a`, `b`, `t`.`c`');
   },
 
   'instances of Escaped are not quoted': function() {
@@ -66,8 +78,28 @@ test('SqlString.escape', {
     assert.equal(SqlString.escape({a: 'b', c: function() {}}), "`a` = 'b'");
   },
 
+  'object values toSqlString is called': function() {
+    assert.equal(SqlString.escape({id: { toSqlString: function() { return 'LAST_INSERT_ID()'; } }}), '`id` = LAST_INSERT_ID()');
+  },
+
+  'objects toSqlString is called': function() {
+    assert.equal(SqlString.escape({ toSqlString: function() { return '@foo_id'; } }), '@foo_id');
+  },
+
+  'objects toSqlString is not quoted': function() {
+    assert.equal(SqlString.escape({ toSqlString: function() { return 'CURRENT_TIMESTAMP()'; } }), 'CURRENT_TIMESTAMP()');
+  },
+
   'nested objects are cast to strings': function() {
     assert.equal(SqlString.escape({a: {nested: true}}), "`a` = '[object Object]'");
+  },
+
+  'nested objects use toString': function() {
+    assert.equal(SqlString.escape({a: { toString: function() { return 'foo'; } }}), "`a` = 'foo'");
+  },
+
+  'nested objects use toString is quoted': function() {
+    assert.equal(SqlString.escape({a: { toString: function() { return "f'oo"; } }}), "`a` = 'f\\'oo'");
   },
 
   'arrays are turned into lists': function() {
@@ -80,6 +112,10 @@ test('SqlString.escape', {
 
   'nested objects inside arrays are cast to strings': function() {
     assert.equal(SqlString.escape([1, {nested: true}, 2]), "1, '[object Object]', 2");
+  },
+
+  'nested objects inside arrays use toString': function() {
+    assert.equal(SqlString.escape([1, { toString: function() { return 'foo'; } }, 2]), "1, 'foo', 2");
   },
 
   'strings are quoted': function() {
@@ -256,6 +292,9 @@ test('SqlString.format', {
 
     var sql = SqlString.format('?', { toString: function () { return 'hello'; } }, true);
     assert.equal(sql, "'hello'");
+
+    var sql = SqlString.format('?', { toSqlString: function () { return '@foo'; } }, true);
+    assert.equal(sql, '@foo');
   },
 
   'sql is untouched if no values are provided': function () {

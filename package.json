@@ -39,5 +39,7 @@
     "test": "node test/run.js",
     "test-ci": "nyc --reporter=text npm test",
     "test-cov": "nyc --reporter=html --reporter=text npm test"
-  }
+  },
+  "types": "index.d.ts",
+  "typings": "index.d.ts"
 }

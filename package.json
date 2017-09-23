@@ -18,6 +18,8 @@
   ],
   "repository": "mysqljs/sqlstring",
   "devDependencies": {
+    "beautify-benchmark": "0.2.4",
+    "benchmark": "2.1.4",
     "eslint": "4.7.2",
     "eslint-plugin-markdown": "1.0.0-beta.6",
     "nyc": "10.3.2",
@@ -35,6 +37,7 @@
     "node": ">= 0.6"
   },
   "scripts": {
+    "bench": "node benchmark/index.js",
     "lint": "eslint --plugin markdown --ext js,md .",
     "test": "node test/run.js",
     "test-ci": "nyc --reporter=text npm test",

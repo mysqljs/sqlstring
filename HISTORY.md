@@ -2,6 +2,7 @@ unreleased
 ==========
 
   * Add `.toSqlString()` escape overriding
+  * Small performance improvement on `escapeId`
 
 2.2.0 / 2016-11-01
 ==================

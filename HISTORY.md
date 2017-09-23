@@ -27,7 +27,7 @@ unreleased
 1.0.0 / 2014-11-09
 ==================
 
- * build: support Node.js 0.8.x
+  * Support Node.js 0.8.x
 
 0.0.1 / 2014-02-25
 ==================

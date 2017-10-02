@@ -1,5 +1,5 @@
-unreleased
-==========
+2.3.0 / 2017-10-01
+==================
 
   * Add `.toSqlString()` escape overriding
   * Add `raw` method to wrap raw strings for escape overriding

@@ -181,6 +181,16 @@ You also have the option (but are not required) to pass in `stringifyObject` and
 allowing you provide a custom means of turning objects into strings, as well as a
 location-specific/timezone-aware `Date`.
 
+This can be further combined with the `SqlString.raw()` helper to generate SQL
+that includes MySQL functions as dynamic vales:
+
+```js
+var userId = 1;
+var data   = { email: 'foobar@example.com', modified: SqlString.raw('NOW()') };
+var sql    = SqlString.format('UPDATE ?? SET ? WHERE `id` = ?', ['users', data, userId]);
+console.log(sql); // UPDATE `users` SET `email` = 'foobar@example.com', `modified` = NOW() WHERE `id` = 1
+```
+
 ## License
 
 [MIT](LICENSE)

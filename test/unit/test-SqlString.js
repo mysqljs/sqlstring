@@ -45,6 +45,12 @@ test('SqlString.escapeId', {
 
   'nested arrays are flattened': function() {
     assert.equal(SqlString.escapeId(['a', ['b', ['t.c']]]), '`a`, `b`, `t`.`c`');
+  },
+
+  'rejects qualified id': function() {
+    assert.throws(function() {
+      SqlString.escapeId(SqlString.identifier('id1.id2', false), true);
+    });
   }
 });
 
@@ -262,6 +268,21 @@ test('SqlString.format', {
     assert.equal(sql, "'foo' or ??? and 'bar'");
   },
 
+  'double quest marks passes pre-escaped id': function () {
+    var sql = SqlString.format(
+      'SELECT ?? FROM ?? WHERE id = ?',
+      [SqlString.identifier('table.id'), SqlString.identifier('table'), 42]);
+    assert.equal(sql, 'SELECT `table`.`id` FROM `table` WHERE id = 42');
+  },
+
+  'double quest marks rejects invalid raw': function () {
+    assert.throws(function () {
+      SqlString.format(
+        'SELECT * FROM ?? WHERE id = 42',
+        [SqlString.raw('NOW()')]);
+    });
+  },
+
   'extra question marks are left untouched': function() {
     var sql = SqlString.format('? and ?', ['a']);
     assert.equal(sql, "'a' and ?");
@@ -332,5 +353,52 @@ test('SqlString.raw', {
 
   'toSqlString returns sql as-is': function() {
     assert.equal(SqlString.raw("NOW() AS 'current_time'").toSqlString(), "NOW() AS 'current_time'");
+  }
+});
+
+test('SqlString.identifier', {
+  'creates object': function() {
+    assert.equal(typeof SqlString.identifier('i'), 'object');
+  },
+
+  'rejects number': function() {
+    assert.throws(function () {
+      SqlString.identifier(42);
+    });
+  },
+
+  'rejects undefined': function() {
+    assert.throws(function () {
+      SqlString.identifier();
+    });
+  },
+
+  'object has toSqlString': function() {
+    assert.equal(
+      typeof SqlString.identifier('NOW()').toSqlString,
+      'function');
+  },
+
+  'toSqlString returns escaped id': function() {
+    assert.equal(
+      SqlString.identifier('Hello, World!').toSqlString(),
+      '`Hello, World!`');
+  },
+
+  'backticks escaped': function() {
+    assert.equal(SqlString.identifier('I`m').toSqlString(), '`I``m`');
+  },
+
+  'escape() does not re-escape': function() {
+    assert.equal(SqlString.escape(SqlString.identifier('I`m')), '`I``m`');
+  },
+
+  'qualified': function() {
+    assert.equal(SqlString.identifier('id1.id2').toSqlString(), '`id1`.`id2`');
+    assert.equal(SqlString.identifier('id1.id2', false).toSqlString(), '`id1`.`id2`');
+  },
+
+  'rejects forbidQualified': function() {
+    assert.equal(SqlString.identifier('id1.id2', true).toSqlString(), '`id1.id2`');
   }
 });

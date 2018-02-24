@@ -1,5 +1,5 @@
-unreleased
-==========
+2.3.1 / 2018-02-24
+==================
 
   * Fix incorrectly replacing non-placeholders in SQL
 

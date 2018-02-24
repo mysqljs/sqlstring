@@ -257,6 +257,11 @@ test('SqlString.format', {
     assert.equal(sql, 'SELECT * FROM `table` WHERE id = 42');
   },
 
+  'triple question marks are ignored': function () {
+    var sql = SqlString.format('? or ??? and ?', ['foo', 'bar', 'fizz', 'buzz']);
+    assert.equal(sql, "'foo' or ??? and 'bar'");
+  },
+
   'extra question marks are left untouched': function() {
     var sql = SqlString.format('? and ?', ['a']);
     assert.equal(sql, "'a' and ?");

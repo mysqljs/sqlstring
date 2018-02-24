@@ -1,3 +1,8 @@
+unreleased
+==========
+
+  * Fix incorrectly replacing non-placeholders in SQL
+
 2.3.0 / 2017-10-01
 ==================
 

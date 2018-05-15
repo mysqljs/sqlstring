@@ -163,6 +163,19 @@ console.log(sql); // SELECT `username`, `email` FROM `users` WHERE id = 1
 
 When you pass an Object to `.escape()` or `.format()`, `.escapeId()` is used to avoid SQL injection in object keys.
 
+#### AND separation in WHERE clauses
+You can use the `?&` placeholder to insert the word `and` instead of separating object lists or arrays with commas. Typically in SQL the WHERE clause uses `and` and `or` separators (the `or` separator is not supported with this placeholder.) SELECT field lists and SET assignment lists require the comma as a separator. The `SqlString.format()` parser will accept a `?&` placeholder to indicate when to use the `and` separator over the comma. The `SqlString.escape()` function now accepts an optional fourth boolean parameter to indicate if an ` and ` should be used to separate object lists and arrays instead of the default comma `, `. This applies to nested lists as well.
+
+```js
+var sql = SqlString.format('UPDATE ?? SET ? WHERE ?&', ['table',{name:'My Name',updated:'Y','status code':'z'}, {id:15,active:'Y'}]);
+console.log(sql); // UPDATE `table` SET `name` = 'My Name', `updated` = 'Y', `status code` = 'z' WHERE `id` = 15 and `active` = 'Y'
+```
+
+```
+var sql = SqlString.format('SELECT ?? FROM ?? WHERE ?&', [['col1','col 2'],'table', {id:15,active:'Y'}]);
+console.log(sql); // SELECT `col1`, `col 2` FROM `table` WHERE `id` = 15 and `active` = 'Y'
+```
+
 ### Formatting queries
 
 You can use `SqlString.format` to prepare a query with multiple insertion points,

@@ -74,6 +74,10 @@ test('SqlString.escape', {
     assert.equal(SqlString.escape({a: 'b', c: 'd'}), "`a` = 'b', `c` = 'd'");
   },
 
+  'objects are turned into key value pairs with and separators': function() {
+    assert.equal(SqlString.escape({key1: 5, 'key 2': 'two words'},undefined,undefined,true), "`key1` = 5 and `key 2` = 'two words'");
+  },
+
   'objects function properties are ignored': function() {
     assert.equal(SqlString.escape({a: 'b', c: function() {}}), "`a` = 'b'");
   },
@@ -108,6 +112,10 @@ test('SqlString.escape', {
 
   'nested arrays are turned into grouped lists': function() {
     assert.equal(SqlString.escape([[1, 2, 3], [4, 5, 6], ['a', 'b', {nested: true}]]), "(1, 2, 3), (4, 5, 6), ('a', 'b', '[object Object]')");
+  },
+
+  'nested arrays are turned into grouped lists with and separators': function() {
+    assert.equal(SqlString.escape([[1, 2, 3], [4, 5, 6], ['a', 'b', {nested: true}]],undefined,undefined,true), "(1 and 2 and 3) and (4 and 5 and 6) and ('a' and 'b' and '[object Object]')");
   },
 
   'nested objects inside arrays are cast to strings': function() {
@@ -255,6 +263,16 @@ test('SqlString.format', {
   'double quest marks are replaced with escaped id': function () {
     var sql = SqlString.format('SELECT * FROM ?? WHERE id = ?', ['table', 42]);
     assert.equal(sql, 'SELECT * FROM `table` WHERE id = 42');
+  },
+
+  'question mark and ampersand together are replaced with escaped array values separated with and when more than one value is present': function () {
+    var sql = SqlString.format('SELECT ?? FROM ?? WHERE ?&', [['col1','col 2'],'table', {id:15,active:'Y'}]);
+    assert.equal(sql, 'SELECT `col1`, `col 2` FROM `table` WHERE `id` = 15 and `active` = \'Y\'');
+  },
+
+  'single question mark, double question mark and question mark and ampersand together are replaced with escaped array values separated with and when more than one value is present': function () {
+    var sql = SqlString.format('UPDATE ?? SET ? WHERE ?&', ['table',{name:'My Name',updated:'Y','status code':'z'}, {id:15,active:'Y'}]);
+    assert.equal(sql, 'UPDATE `table` SET `name` = \'My Name\', `updated` = \'Y\', `status code` = \'z\' WHERE `id` = 15 and `active` = \'Y\'');
   },
 
   'triple question marks are ignored': function () {

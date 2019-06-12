@@ -1,3 +1,8 @@
+unreleased
+==========
+
+  * perf: remove outdated array pattern
+
 2.3.1 / 2018-02-24
 ==================
 

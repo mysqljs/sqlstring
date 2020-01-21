@@ -22,7 +22,7 @@
     "beautify-benchmark": "0.2.4",
     "benchmark": "2.1.4",
     "eslint": "5.16.0",
-    "eslint-plugin-markdown": "1.0.0-beta.6",
+    "eslint-plugin-markdown": "1.0.1",
     "nyc": "15.0.0",
     "urun": "0.0.8",
     "utest": "0.0.8"

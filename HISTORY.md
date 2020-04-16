@@ -1,5 +1,5 @@
-unreleased
-==========
+2.3.2 / 2020-04-15
+==================
 
   * perf: remove outdated array pattern
 

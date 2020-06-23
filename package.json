@@ -23,7 +23,7 @@
     "benchmark": "2.1.4",
     "eslint": "5.16.0",
     "eslint-plugin-markdown": "1.0.2",
-    "nyc": "15.0.1",
+    "nyc": "15.1.0",
     "urun": "0.0.8",
     "utest": "0.0.8"
   },

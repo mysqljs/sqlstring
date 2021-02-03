@@ -1,3 +1,8 @@
+unreleased
+==========
+
+  * Add `.toSqlString()` escapeId overriding
+
 2.3.3 / 2022-03-06
 ==================
 

@@ -2,6 +2,22 @@
   "env": {
     "node": true
   },
+  "plugins": [
+    "markdown"
+  ],
+  "overrides": [
+    {
+      "files": "**/*.md",
+      "processor": "markdown/markdown"
+    },
+    {
+      "files": "**/*.md/*.js",
+      "rules": {
+        "no-undef": 0,
+        "no-unused-vars": 0
+      }
+    }
+  ],
   "rules": {
     "comma-dangle": [2, "never"],
     "comma-spacing": ["error", { "before": false, "after": true }],

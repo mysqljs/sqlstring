@@ -1,5 +1,5 @@
-unreleased
-==========
+2.3.3 / 2022-03-06
+==================
 
   * Fix escaping `Date` objects from foreign isolates
 

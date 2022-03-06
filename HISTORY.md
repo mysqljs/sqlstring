@@ -1,3 +1,8 @@
+unreleased
+==========
+
+  * Fix escaping `Date` objects from foreign isolates
+
 2.3.2 / 2020-04-15
 ==================
 

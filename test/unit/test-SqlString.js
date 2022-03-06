@@ -1,6 +1,7 @@
 var assert    = require('assert');
 var SqlString = require('../../');
 var test      = require('utest');
+var vm        = require('vm');
 
 test('SqlString.escapeId', {
   'value is quoted': function() {
@@ -220,6 +221,14 @@ test('SqlString.escape', {
     var string = SqlString.escape(date);
 
     assert.strictEqual(string, 'NULL');
+  },
+
+  'dates from other isolates are converted': function() {
+    var expected = '2012-05-07 11:42:03.002';
+    var date     = vm.runInNewContext('new Date(2012, 4, 7, 11, 42, 3, 2)');
+    var string   = SqlString.escape(date);
+
+    assert.strictEqual(string, "'" + expected + "'");
   },
 
   'buffers are converted to hex': function() {

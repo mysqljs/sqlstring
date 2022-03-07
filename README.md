@@ -70,9 +70,6 @@ Different value types are escaped differently, here is how:
 * Date objects are converted to `'YYYY-mm-dd HH:ii:ss'` strings
 * Buffers are converted to hex strings, e.g. `X'0fa5'`
 * Strings are safely escaped
-* Arrays are turned into list, e.g. `['a', 'b']` turns into `'a', 'b'`
-* Nested arrays are turned into grouped lists (for bulk inserts), e.g. `[['a',
-  'b'], ['c', 'd']]` turns into `('a', 'b'), ('c', 'd')`
 * Objects that have a `toSqlString` method will have `.toSqlString()` called
   and the returned value is used as the raw SQL.
 * `undefined` / `null` are converted to `NULL`
@@ -144,8 +141,7 @@ like to have escaped like this:
 
 ```js
 var userId = 1;
-var columns = ['username', 'email'];
-var sql     = SqlString.format('SELECT ?? FROM ?? WHERE id = ?', [columns, 'users', userId]);
+var sql    = SqlString.format('SELECT ??, ?? FROM ?? WHERE id = ?', ['username', 'email', 'users', userId]);
 console.log(sql); // SELECT `username`, `email` FROM `users` WHERE id = 1
 ```
 **Please note that this last character sequence is experimental and syntax might change**

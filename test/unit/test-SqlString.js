@@ -40,12 +40,8 @@ test('SqlString.escapeId', {
     assert.equal(SqlString.escapeId('id1.id2', true), '`id1.id2`');
   },
 
-  'arrays are turned into lists': function() {
-    assert.equal(SqlString.escapeId(['a', 'b', 't.c']), '`a`, `b`, `t`.`c`');
-  },
-
-  'nested arrays are flattened': function() {
-    assert.equal(SqlString.escapeId(['a', ['b', ['t.c']]]), '`a`, `b`, `t`.`c`');
+  'arrays are stringified and then escaped': function() {
+    assert.equal(SqlString.escapeId(['a', 'b', 'c']), '`a,b,c`');
   }
 });
 
@@ -84,20 +80,8 @@ test('SqlString.escape', {
     assert.equal(SqlString.escape({ toSqlString: function() { return 'CURRENT_TIMESTAMP()'; } }), 'CURRENT_TIMESTAMP()');
   },
 
-  'arrays are turned into lists': function() {
-    assert.equal(SqlString.escape([1, 2, 'c']), "1, 2, 'c'");
-  },
-
-  'nested arrays are turned into grouped lists': function() {
-    assert.equal(SqlString.escape([[1, 2, 3], [4, 5, 6], ['a', 'b', {nested: true}]]), "(1, 2, 3), (4, 5, 6), ('a', 'b', '[object Object]')");
-  },
-
-  'nested objects inside arrays are cast to strings': function() {
-    assert.equal(SqlString.escape([1, {nested: true}, 2]), "1, '[object Object]', 2");
-  },
-
-  'nested objects inside arrays use toString': function() {
-    assert.equal(SqlString.escape([1, { toString: function() { return 'foo'; } }, 2]), "1, 'foo', 2");
+  'arrays are stringified and escaped': function() {
+    assert.equal(SqlString.escape([1, 2, 'c']), "'1,2,c'");
   },
 
   'strings are quoted': function() {

@@ -1,6 +1,7 @@
 unreleased
 ==========
 
+  * Remove array escape behavior
   * Remove object key-value-pair escape behavior
 
 2.3.3 / 2022-03-06

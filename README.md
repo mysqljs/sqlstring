@@ -75,24 +75,14 @@ Different value types are escaped differently, here is how:
   'b'], ['c', 'd']]` turns into `('a', 'b'), ('c', 'd')`
 * Objects that have a `toSqlString` method will have `.toSqlString()` called
   and the returned value is used as the raw SQL.
-* Objects are turned into `key = 'val'` pairs for each enumerable property on
-  the object. If the property's value is a function, it is skipped; if the
-  property's value is an object, toString() is called on it and the returned
-  value is used.
 * `undefined` / `null` are converted to `NULL`
 * `NaN` / `Infinity` are left as-is. MySQL does not support these, and trying
   to insert them as values will trigger MySQL errors until they implement
   support.
+* All other values types are converted to a string using the global `String()`
+  and the resulting value is escaped.
 
-You may have noticed that this escaping allows you to do neat things like this:
-
-```js
-var post  = {id: 1, title: 'Hello MySQL'};
-var sql = SqlString.format('INSERT INTO posts SET ?', post);
-console.log(sql); // INSERT INTO posts SET `id` = 1, `title` = 'Hello MySQL'
-```
-
-And the `toSqlString` method allows you to form complex queries with functions:
+The `toSqlString` method allows you to form complex queries with functions:
 
 ```js
 var CURRENT_TIMESTAMP = { toSqlString: function() { return 'CURRENT_TIMESTAMP()'; } };
@@ -176,8 +166,7 @@ console.log(sql); // SELECT * FROM `users` WHERE `id` = 1
 
 Following this you then have a valid, escaped query that you can then send to the database safely.
 This is useful if you are looking to prepare the query before actually sending it to the database.
-You also have the option (but are not required) to pass in `stringifyObject` and `timeZone`,
-allowing you provide a custom means of turning objects into strings, as well as a
+You also have the option (but are not required) to pass in `timeZone`, allowing you provide a
 location-specific/timezone-aware `Date`.
 
 This can be further combined with the `SqlString.raw()` helper to generate SQL
@@ -185,8 +174,9 @@ that includes MySQL functions as dynamic vales:
 
 ```js
 var userId = 1;
-var data   = { email: 'foobar@example.com', modified: SqlString.raw('NOW()') };
-var sql    = SqlString.format('UPDATE ?? SET ? WHERE `id` = ?', ['users', data, userId]);
+var email  = 'foobar@example.com';
+var sql    = SqlString.format('UPDATE ?? SET `email` = ?, `modified` = ? WHERE `id` = ?',
+  ['users', email, SqlString.raw('NOW()'), userId]);
 console.log(sql); // UPDATE `users` SET `email` = 'foobar@example.com', `modified` = NOW() WHERE `id` = 1
 ```
 

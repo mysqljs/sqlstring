@@ -71,16 +71,9 @@ test('SqlString.escape', {
     assert.equal(SqlString.escape(SqlString.raw('NOW()')), 'NOW()');
   },
 
-  'objects are turned into key value pairs': function() {
-    assert.equal(SqlString.escape({a: 'b', c: 'd'}), "`a` = 'b', `c` = 'd'");
-  },
-
-  'objects function properties are ignored': function() {
-    assert.equal(SqlString.escape({a: 'b', c: function() {}}), "`a` = 'b'");
-  },
-
-  'object values toSqlString is called': function() {
-    assert.equal(SqlString.escape({id: { toSqlString: function() { return 'LAST_INSERT_ID()'; } }}), '`id` = LAST_INSERT_ID()');
+  'objects are turned into string value': function() {
+    assert.equal(SqlString.escape({ 'hello': 'world' }), "'[object Object]'");
+    assert.equal(SqlString.escape({ toString: function () { return 'hello'; } }), "'hello'");
   },
 
   'objects toSqlString is called': function() {
@@ -89,18 +82,6 @@ test('SqlString.escape', {
 
   'objects toSqlString is not quoted': function() {
     assert.equal(SqlString.escape({ toSqlString: function() { return 'CURRENT_TIMESTAMP()'; } }), 'CURRENT_TIMESTAMP()');
-  },
-
-  'nested objects are cast to strings': function() {
-    assert.equal(SqlString.escape({a: {nested: true}}), "`a` = '[object Object]'");
-  },
-
-  'nested objects use toString': function() {
-    assert.equal(SqlString.escape({a: { toString: function() { return 'foo'; } }}), "`a` = 'foo'");
-  },
-
-  'nested objects use toString is quoted': function() {
-    assert.equal(SqlString.escape({a: { toString: function() { return "f'oo"; } }}), "`a` = 'f\\'oo'");
   },
 
   'arrays are turned into lists': function() {
@@ -179,7 +160,7 @@ test('SqlString.escape', {
   'dates are converted to specified time zone "Z"': function() {
     var expected = '2012-05-07 11:42:03.002';
     var date     = new Date(Date.UTC(2012, 4, 7, 11, 42, 3, 2));
-    var string   = SqlString.escape(date, false, 'Z');
+    var string   = SqlString.escape(date, 'Z');
 
     assert.strictEqual(string, "'" + expected + "'");
   },
@@ -187,7 +168,7 @@ test('SqlString.escape', {
   'dates are converted to specified time zone "+01"': function() {
     var expected = '2012-05-07 12:42:03.002';
     var date     = new Date(Date.UTC(2012, 4, 7, 11, 42, 3, 2));
-    var string   = SqlString.escape(date, false, '+01');
+    var string   = SqlString.escape(date, '+01');
 
     assert.strictEqual(string, "'" + expected + "'");
   },
@@ -195,7 +176,7 @@ test('SqlString.escape', {
   'dates are converted to specified time zone "+0200"': function() {
     var expected = '2012-05-07 13:42:03.002';
     var date     = new Date(Date.UTC(2012, 4, 7, 11, 42, 3, 2));
-    var string   = SqlString.escape(date, false, '+0200');
+    var string   = SqlString.escape(date, '+0200');
 
     assert.strictEqual(string, "'" + expected + "'");
   },
@@ -203,15 +184,15 @@ test('SqlString.escape', {
   'dates are converted to specified time zone "-05:00"': function() {
     var expected = '2012-05-07 06:42:03.002';
     var date     = new Date(Date.UTC(2012, 4, 7, 11, 42, 3, 2));
-    var string   = SqlString.escape(date, false, '-05:00');
+    var string   = SqlString.escape(date, '-05:00');
 
     assert.strictEqual(string, "'" + expected + "'");
   },
 
   'dates are converted to UTC for unknown time zone': function() {
     var date     = new Date(Date.UTC(2012, 4, 7, 11, 42, 3, 2));
-    var expected = SqlString.escape(date, false, 'Z');
-    var string   = SqlString.escape(date, false, 'foo');
+    var expected = SqlString.escape(date, 'Z');
+    var string   = SqlString.escape(date, 'foo');
 
     assert.strictEqual(string, expected);
   },
@@ -291,13 +272,8 @@ test('SqlString.format', {
     assert.equal(sql, '?');
   },
 
-  'objects is converted to values': function () {
+  'objects is converted to string value': function () {
     var sql = SqlString.format('?', { 'hello': 'world' }, false);
-    assert.equal(sql, "`hello` = 'world'");
-  },
-
-  'objects is not converted to values': function () {
-    var sql = SqlString.format('?', { 'hello': 'world' }, true);
     assert.equal(sql, "'[object Object]'");
 
     var sql = SqlString.format('?', { toString: function () { return 'hello'; } }, true);

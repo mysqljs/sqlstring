@@ -172,6 +172,10 @@ console.log(sql); // SELECT `username`, `email` FROM `users` WHERE id = 1
 ```
 **Please note that this last character sequence is experimental and syntax might change**
 
+To skip escaping one or more of the columns names that you pass to `SqlString.escapeId()`
+you may use `SqlString.raw()` similarly to how it is used with `SqlString.escape()`.
+See above for more details.
+
 When you pass an Object to `.escape()` or `.format()`, `.escapeId()` is used to avoid SQL injection in object keys.
 
 ### Formatting queries

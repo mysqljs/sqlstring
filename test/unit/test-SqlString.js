@@ -29,11 +29,7 @@ test('SqlString.escapeId', {
   },
 
   'value containing separator is quoted': function() {
-    assert.equal(SqlString.escapeId('id1.id2'), '`id1`.`id2`');
-  },
-
-  'value containing separator and escapes is quoted': function() {
-    assert.equal(SqlString.escapeId('id`1.i`d2'), '`id``1`.`i``d2`');
+    assert.equal(SqlString.escapeId('id1.id2'), '`id1.id2`');
   },
 
   'value containing separator is fully escaped when forbidQualified': function() {

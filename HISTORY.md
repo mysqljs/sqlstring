@@ -1,6 +1,7 @@
 unreleased
 ==========
 
+  * Change identifier escaping to always be literal
   * Remove array escape behavior
   * Remove object key-value-pair escape behavior
 

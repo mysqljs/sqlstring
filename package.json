@@ -18,6 +18,9 @@
     "sql escape"
   ],
   "repository": "mysqljs/sqlstring",
+  "dependencies": {
+    "template-tag-common": "3.0.4"
+  },
   "devDependencies": {
     "beautify-benchmark": "0.2.4",
     "benchmark": "2.1.4",

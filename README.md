@@ -113,11 +113,15 @@ console.log(sql); // UPDATE posts SET modified = CURRENT_TIMESTAMP() WHERE id = 
 ```
 
 To generate objects with a `toSqlString` method, the `SqlString.raw()` method can
-be used. This creates an object that will be left un-touched when using in a `?`
+be used. This creates an object that will be left un-touched when used in a `?`
 placeholder, useful for using functions as dynamic values:
 
 **Caution** The string provided to `SqlString.raw()` will skip all escaping
 functions when used, so be careful when passing in unvalidated input.
+
+Similarly, `SqlString.identifier(id, forbidQualified)` creates an object with a
+`toSqlString` method that returns `SqlString.escapeId(id, forbidQualified)`.
+Its result is not re-escaped when used in a `?` or `??` placeholder.
 
 ```js
 var CURRENT_TIMESTAMP = SqlString.raw('CURRENT_TIMESTAMP()');
@@ -161,6 +165,15 @@ var sql    = 'SELECT * FROM posts ORDER BY ' + SqlString.escapeId(sorter, true);
 console.log(sql); // SELECT * FROM posts ORDER BY `date.2`
 ```
 
+If `escapeId` receives an object with a `toSqlString` method, then `escapeId` uses
+that method's result after coercing it to a string.
+
+```js
+var sorter = SqlString.identifier('date'); // ({ toSqlString: () => '`date`' })
+var sql    = 'SELECT * FROM posts ORDER BY ' + sqlString.escapeId(sorter);
+console.log(sql); // SELECT * FROM posts ORDER BY `date`
+```
+
 Alternatively, you can use `??` characters as placeholders for identifiers you would
 like to have escaped like this:
 
@@ -172,7 +185,8 @@ console.log(sql); // SELECT `username`, `email` FROM `users` WHERE id = 1
 ```
 **Please note that this last character sequence is experimental and syntax might change**
 
-When you pass an Object to `.escape()` or `.format()`, `.escapeId()` is used to avoid SQL injection in object keys.
+When you pass an Object to `.escape()` or `.format()`, `.escapeId()`
+is used to avoid SQL injection in object keys.
 
 ### Formatting queries
 
@@ -201,6 +215,78 @@ var data   = { email: 'foobar@example.com', modified: SqlString.raw('NOW()') };
 var sql    = SqlString.format('UPDATE ?? SET ? WHERE `id` = ?', ['users', data, userId]);
 console.log(sql); // UPDATE `users` SET `email` = 'foobar@example.com', `modified` = NOW() WHERE `id` = 1
 ```
+
+### ES6 Template Tag Support
+
+`SqlString.sql` works as a template tag in Node versions that support ES6 features
+(node runtime versions 6 and later).
+
+```es6
+var column     = 'users';
+var userId     = 1;
+var data       = { email: 'foobar@example.com', modified: SqlString.raw('NOW()') };
+var fromFormat = SqlString.format('UPDATE ?? SET ? WHERE `id` = ?', [column, data, userId]);
+var fromTag    = SqlString.sql`UPDATE \`${column}\` SET ${data} WHERE \`id\` = ${userId}`;
+
+console.log(fromFormat);
+console.log(fromTag.toSqlString());
+// Both emit:
+// UPDATE `users` SET `email` = 'foobar@example.com', `modified` = NOW() WHERE `id` = 1
+```
+
+
+There are some differences between `SqlString.format` and `SqlString.raw`:
+
+* The `SqlString.sql` tag returns a raw chunk SQL as if by `SqlString.raw`,
+  whereas `SqlString.format` returns a string.
+  This allows chaining:
+  ```es6
+  let data = { a: 1 };
+  let whereClause = SqlString.sql`WHERE ${data}`;
+  SqlString.sql`SELECT * FROM TABLE ${whereClause}`.toSqlString();
+  // SELECT * FROM TABLE WHERE `a` = 1
+  ```
+* An interpolation in a quoted string will not insert excess quotes:
+  ```es6
+  SqlString.sql`SELECT '${ 'foo' }' `.toSqlString() === `SELECT 'foo' `;
+  SqlString.sql`SELECT ${ 'foo' } `.toSqlString()   === `SELECT 'foo' `;
+  SqlString.format("SELECT '?' ", ['foo'])          === `SELECT ''foo'' `;
+  ```
+  This means that you can interpolate a string into an ID thus:
+  ```es6
+  SqlString.sql`SELECT * FROM \`${ 'table' }\``.toSqlString() === 'SELECT * FROM `table`'
+  SqlString.format('SELECT * FROM ??', ['table'])             === 'SELECT * FROM `table`'
+  ```
+* Backticks end a template tag, so you need to escape backticks.
+  ```es6
+  SqlString.sql`SELECT \`${ 'id' }\` FROM \`TABLE\``.toSqlString()
+  === 'SELECT `id` FROM `TABLE`'
+  ```
+* Other escape sequences are raw.
+  ```es6
+  SqlString.sql`SELECT "\n"`.toSqlString()      === 'SELECT "\\n"'
+  SqlString.format('SELECT "\n"', [])           === 'SELECT "\n"'
+  SqlString.format(String.raw`SELECT "\n"`, []) === 'SELECT "\\n"'
+  ```
+* `SqlString.format` takes options at the end, but `SqlString.sql`
+  takes an options object in a separate call.
+  ```es6
+  let timeZone = 'GMT';
+  let date = new Date(Date.UTC(2000, 0, 1));
+  SqlString.sql({ timeZone })`SELECT ${date}`.toSqlString() ===
+    'SELECT \'2000-01-01 00:00:00.000\'';
+  SqlString.format('SELECT ?', [date], false, timezone) ===
+    'SELECT \'2000-01-01 00:00:00.000\'';
+  ```
+  The options object can contain any of
+  `{ stringifyObjects, timeZone, forbidQualified }` which have the
+  same meaning as when used with other `SqlString` APIs.
+
+`SqlString.sql` handles `${...}` inside quoted strings as if the tag
+matched the following grammar:
+
+[![Railroad Diagram](docs/sql-railroad.svg)](docs/sql-railroad.svg)
+
 
 ## License
 

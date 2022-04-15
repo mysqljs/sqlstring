@@ -91,7 +91,8 @@ Different value types are escaped differently, here is how:
   the object. If the property's value is a function, it is skipped; if the
   property's value is an object, toString() is called on it and the returned
   value is used.
-* `undefined` / `null` are converted to `NULL`
+* JavaScript `null` is converted to MySQL `NULL`
+* JavaScript `undefined` is converted to MySQL `DEFAULT`
 * `NaN` / `Infinity` are left as-is. MySQL does not support these, and trying
   to insert them as values will trigger MySQL errors until they implement
   support.
